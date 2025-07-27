@@ -1,0 +1,34 @@
+{
+  "name": "uptick-week_4",
+  "version": "1.0.0",
+  "description": "This backend application provides a RESTful API for managing users and their notes. Built with Express.js, it leverages Mongoose ODM to interact with a MongoDB database. Users can register, authenticate, and create, read, update, and delete their personal notes.",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx ts-node server.ts",
+    "dev": "nodemon --exec ts-node server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Odewale-Emmanuel/Uptick-Week_4.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Odewale-Emmanuel/Uptick-Week_4/issues"
+  },
+  "homepage": "https://github.com/Odewale-Emmanuel/Uptick-Week_4#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/mongoose": "^5.11.96",
+    "@types/node": "^24.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.16.5"
+  }
+}
