@@ -46,4 +46,23 @@ async function getNotes(req: Request, res: Response) {
   }
 }
 
+async function deleteNote(req: Request, res: Response) {
+  const noteId = req.body.id;
+  console.log(noteId);
+  try {
+    const deletedNote = await noteModel.deleteOne().where("_id").equals(noteId);
+    if (deletedNote.acknowledged && deletedNote.deletedCount >= 1) {
+      res.send("Note deleted successfully");
+    } else {
+      res.send(`No Note found for the requested note id ${noteId}`);
+    }
+  } catch (error: any) {
+    console.log(
+      `An error occured while trying to delete note. ERROR-->: ${error.message} `
+    );
+    throw error;
+  }
+}
+
+export { deleteNote };
 export default getNotes;

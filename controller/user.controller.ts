@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import userModel from "../model/user";
+import noteModel from "../model/note";
 mongoose.connect("mongodb://127.0.0.1:27017/note_db_app");
 import { Response, Request } from "express";
 // import seedUsers from "../seed/user";
@@ -44,4 +45,24 @@ async function getUsers(req: Request, res: Response) {
   }
 }
 
+async function deleteUser(req: Request, res: Response) {
+  const userId = req.body.id;
+  console.log(userId);
+
+  try {
+    const deletedUser = await userModel.deleteOne().where("_id").equals(userId);
+    if (deletedUser.acknowledged && deletedUser.deletedCount >= 1) {
+      await noteModel.deleteMany().where("user_id").equals(userId);
+      res.send("User deleted successfully");
+    } else {
+      res.send("User not found");
+    }
+  } catch (error: any) {
+    console.log(
+      `An error occured while trying to delete user. ERROR-->: ${error.message} `
+    );
+    throw error;
+  }
+}
+export { deleteUser };
 export default getUsers;
