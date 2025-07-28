@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import userModel from "../model/user";
 import noteModel from "../model/note";
 import { Response, Request } from "express";
+import dotenv from "dotenv";
+dotenv.config();
 
 const mongoUri = process.env.MONGODB_URI;
 if (!mongoUri) {
