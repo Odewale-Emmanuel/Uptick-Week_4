@@ -3,7 +3,6 @@ import noteModel from "../model/note";
 import { Response, Request } from "express";
 import dotenv from "dotenv";
 dotenv.config();
-// import seedNotes from "../seed/note";
 
 const mongoUri = process.env.MONGODB_URI;
 if (!mongoUri) {
@@ -25,9 +24,6 @@ async function createNote(req: Request, res: Response) {
   }
 
   try {
-    // const notes = await seedNotes();
-    // To initialize database with notes from users in the database
-
     await noteModel.create({
       title: title,
       content: content,

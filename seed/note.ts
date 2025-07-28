@@ -1,6 +1,17 @@
+// IMPORTANT: Run the user seed file (seed/user.ts) first to generate users in the database.
+// After seeding users, update the user_id fields below to match the actual user IDs from your database.
+// This ensures notes are correctly linked to existing users.
+
 import mongoose from "mongoose";
 import { INote } from "../types/note";
 import Note from "../model/note";
+import dotenv from "dotenv";
+dotenv.config();
+
+const mongoUri = process.env.MONGODB_URI;
+if (!mongoUri) {
+  throw new Error("MONGODB_URI is not defined in environment variables.");
+}
 
 const notes: Pick<INote, "title" | "content" | "user_id">[] = [
   {
@@ -119,4 +130,5 @@ async function seedNotes() {
   }
 }
 
-export default seedNotes;
+seedNotes();
+// To initialize database with notes from users in the database

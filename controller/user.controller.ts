@@ -2,9 +2,6 @@ import mongoose from "mongoose";
 import userModel from "../model/user";
 import noteModel from "../model/note";
 import { Response, Request } from "express";
-import dotenv from "dotenv";
-dotenv.config();
-// import seedUsers from "../seed/user";
 
 const mongoUri = process.env.MONGODB_URI;
 if (!mongoUri) {
@@ -23,9 +20,6 @@ async function createUser(req: Request, res: Response) {
   }
 
   try {
-    // const users = await seedUsers();
-    // To initialize database with a few users to start with
-
     await userModel.create({
       name: userName,
       email: userEmail.toLowerCase(),

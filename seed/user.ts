@@ -1,5 +1,7 @@
 import { IUser } from "../types/user";
 import User from "../model/user";
+import dotenv from "dotenv";
+dotenv.config();
 
 const users: Pick<IUser, "name" | "email">[] = [
   {
@@ -89,4 +91,5 @@ async function seedUsers() {
   }
 }
 
-export default seedUsers;
+seedUsers();
+// To initialize database with a few users to start with
