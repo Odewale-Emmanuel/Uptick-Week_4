@@ -1,8 +1,16 @@
 import mongoose from "mongoose";
 import noteModel from "../model/note";
-mongoose.connect("mongodb://127.0.0.1:27017/note_db_app");
 import { Response, Request } from "express";
+import dotenv from "dotenv";
+dotenv.config();
 // import seedNotes from "../seed/note";
+
+const mongoUri = process.env.MONGODB_URI;
+if (!mongoUri) {
+  throw new Error("MONGODB_URI is not defined in environment variables.");
+}
+
+mongoose.connect(mongoUri);
 
 async function createNote(req: Request, res: Response) {
   const title = req.body.title;
