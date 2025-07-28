@@ -9,26 +9,31 @@ async function createUser(req: Request, res: Response) {
   const userName = req.body.name;
   const userEmail = req.body.email;
 
+  if (!userName || !userEmail) {
+    res.status(400).send("Missing required fields: name and email");
+    return;
+  }
+
   try {
+    // const users = await seedUsers();
+    // To initialize database with a few users to start with
+
     await userModel.create({
       name: userName,
       email: userEmail.toLowerCase(),
     });
-    res.send("user created successfully");
+    res.status(201).send("user created successfully");
   } catch (error: any) {
     res
       .status(500)
       .send(
         `An error occured while trying to create new user. ERROR-->: ${error.message} `
       );
-    throw error;
   }
 }
 
 async function getUsers(req: Request, res: Response) {
   try {
-    // const users = await seedUsers();
-    // To initialize database with a few users to start with
     const { user_id } = req.query;
 
     if (user_id) {
@@ -38,30 +43,26 @@ async function getUsers(req: Request, res: Response) {
         });
 
         if (user) {
-          res.json(user);
+          res.status(200).json(user);
         } else {
-          res.send(`User width id: ${user_id} not found`);
+          res.status(404).send(`User with id: ${user_id} not found`);
         }
-      } catch (error) {
+      } catch (error: any) {
         res
-          .status(500)
+          .status(400)
           .send(
-            `An error occured while trying to get requested user: ${user_id} information please make sure you pass in a valid user id`
+            `An error occured while trying to get requested user: ${user_id} information. Please make sure you pass in a valid user id. ERROR-->: ${error.message}`
           );
-        throw error;
       }
-
       return;
     }
 
     const users = await userModel.find();
-    res.json(users);
-    console.log(users.length);
+    res.status(200).json(users);
   } catch (error: any) {
     res
       .status(500)
       .send(`An error occured while getting all users -->: ${error.message} `);
-    throw error;
   }
 }
 
@@ -71,9 +72,14 @@ async function updateUser(req: Request, res: Response) {
   const userEmail = req.body.email;
   const updated_at = new Date();
 
+  if (!userId || !userName || !userEmail) {
+    res.status(400).send("Missing required fields: id, name, and email");
+    return;
+  }
+
   const foundUser = await userModel.findById({ _id: userId });
   if (!foundUser) {
-    res.send("user not found please pass in a valid user id");
+    res.status(404).send("user not found please pass in a valid user id");
     return;
   }
 
@@ -82,27 +88,31 @@ async function updateUser(req: Request, res: Response) {
       { _id: userId },
       { name: userName, email: userEmail, updated_at: updated_at }
     );
-    res.send("user updated successfully");
+    res.status(200).send("user updated successfully");
   } catch (error: any) {
     res
       .status(500)
       .send(
         `An error occured while trying to update user. ERROR-->: ${error.message} `
       );
-    throw error;
   }
 }
 
 async function deleteUser(req: Request, res: Response) {
   const userId = req.body.id;
 
+  if (!userId) {
+    res.status(400).send("Missing required field: id");
+    return;
+  }
+
   try {
     const deletedUser = await userModel.deleteOne().where("_id").equals(userId);
     if (deletedUser.acknowledged && deletedUser.deletedCount >= 1) {
       await noteModel.deleteMany().where("user_id").equals(userId);
-      res.send("User deleted successfully");
+      res.status(200).send("User deleted successfully");
     } else {
-      res.send("User not found");
+      res.status(404).send("User not found");
     }
   } catch (error: any) {
     res
@@ -110,7 +120,6 @@ async function deleteUser(req: Request, res: Response) {
       .send(
         `An error occured while trying to delete user. ERROR-->: ${error.message} `
       );
-    throw error;
   }
 }
 

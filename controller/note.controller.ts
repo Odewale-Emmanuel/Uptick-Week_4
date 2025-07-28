@@ -9,27 +9,34 @@ async function createNote(req: Request, res: Response) {
   const content = req.body.content;
   const user_id = req.body.user_id;
 
+  if (!title || !content || !user_id) {
+    res
+      .status(400)
+      .send("Missing required fields: title, content, and user_id");
+    return;
+  }
+
   try {
+    // const notes = await seedNotes();
+    // To initialize database with notes from users in the database
+
     await noteModel.create({
       title: title,
       content: content,
       user_id: user_id,
     });
-    res.send("note created successfully");
+    res.status(201).send("note created successfully");
   } catch (error: any) {
     res
       .status(500)
       .send(
         `An error occured while trying to create new note. ERROR-->: ${error.message} `
       );
-    throw error;
   }
 }
 
 async function getNotes(req: Request, res: Response) {
   try {
-    // const notes = await seedNotes();
-    // To initialize database with notes from users in the database
     const { user_id } = req.query;
 
     if (user_id) {
@@ -40,31 +47,26 @@ async function getNotes(req: Request, res: Response) {
           .equals(user_id);
 
         if (userNotes.length) {
-          res.json(userNotes);
-          console.log(userNotes.length);
+          res.status(200).json(userNotes);
         } else {
-          res.send(`No note found for user: ${user_id}`);
+          res.status(404).send(`No note found for user: ${user_id}`);
         }
-      } catch (error) {
+      } catch (error: any) {
         res
-          .status(500)
+          .status(400)
           .send(
-            `An error occured while getting the notes for user: ${user_id} please make sure you pass in a valid user id`
+            `An error occured while getting the notes for user: ${user_id}. Please make sure you pass in a valid user id. ERROR-->: ${error.message}`
           );
-        throw error;
       }
-
       return;
     }
 
     const notes = await noteModel.find();
-    res.json(notes);
-    console.log(notes.length);
+    res.status(200).json(notes);
   } catch (error: any) {
     res
       .status(500)
       .send(`An error occured while getting all notes -->: ${error.message} `);
-    throw error;
   }
 }
 
@@ -74,9 +76,16 @@ async function updateNote(req: Request, res: Response) {
   const content = req.body.content;
   const updated_at = new Date();
 
+  if (!noteId || !title || !content) {
+    res
+      .status(400)
+      .send("Missing required fields: note_id, title, and content");
+    return;
+  }
+
   const foundNote = await noteModel.findById({ _id: noteId });
   if (!foundNote) {
-    res.send("note not found please pass in a valid note id");
+    res.status(404).send("note not found please pass in a valid note id");
     return;
   }
 
@@ -85,26 +94,30 @@ async function updateNote(req: Request, res: Response) {
       { _id: noteId },
       { title: title, content: content, updated_at: updated_at }
     );
-    res.send("note updated successfully");
+    res.status(200).send("note updated successfully");
   } catch (error: any) {
     res
       .status(500)
       .send(
         `An error occured while trying to update note. ERROR-->: ${error.message} `
       );
-    throw error;
   }
 }
 
 async function deleteNote(req: Request, res: Response) {
   const noteId = req.body.id;
 
+  if (!noteId) {
+    res.status(400).send("Missing required field: id");
+    return;
+  }
+
   try {
     const deletedNote = await noteModel.deleteOne().where("_id").equals(noteId);
     if (deletedNote.acknowledged && deletedNote.deletedCount >= 1) {
-      res.send("Note deleted successfully");
+      res.status(200).send("Note deleted successfully");
     } else {
-      res.send(`No Note found for the requested note id ${noteId}`);
+      res.status(404).send(`No Note found for the requested note id ${noteId}`);
     }
   } catch (error: any) {
     res
@@ -112,7 +125,6 @@ async function deleteNote(req: Request, res: Response) {
       .send(
         `An error occured while trying to delete note. ERROR-->: ${error.message} `
       );
-    throw error;
   }
 }
 
