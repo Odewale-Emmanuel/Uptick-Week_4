@@ -53,4 +53,42 @@ This backend application provides a RESTful API for managing users and their not
 
 ---
 
+## API Routes
+
+### /api/user
+
+- **GET** `/api/user`
+
+  - Returns all users, or a single user if `user_id` is provided as a query parameter.
+
+- **POST** `/api/user`
+
+  - Creates a new user from request body details.
+
+- **DELETE** `/api/user`
+
+  - Deletes a user using `id` from request body and removes all notes attached to the user.
+
+- **PATCH** `/api/user`
+  - Updates user details from request body.
+
+### /api/note
+
+- **GET** `/api/note`
+
+  - Returns all notes, or all notes for a single user if `user_id` is provided as a query parameter.
+
+- **POST** `/api/note`
+
+  - Creates a new note from request body details.
+
+- **DELETE** `/api/note`
+
+  - Deletes a note using its `id` from request body.
+
+- **PATCH** `/api/note`
+  - Updates note details from request body.
+
+---
+
 This backend API ensures seamless note-taking with a user-friendly design and efficient database management. It is ideal for personal use or further integration into larger applications.
