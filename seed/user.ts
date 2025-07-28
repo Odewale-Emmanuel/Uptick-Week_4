@@ -1,7 +1,15 @@
+import mongoose from "mongoose";
 import { IUser } from "../types/user";
 import User from "../model/user";
 import dotenv from "dotenv";
 dotenv.config();
+
+const mongoUri = process.env.MONGODB_URI;
+if (!mongoUri) {
+  throw new Error("MONGODB_URI is not defined in environment variables.");
+}
+
+mongoose.connect(mongoUri);
 
 const users: Pick<IUser, "name" | "email">[] = [
   {

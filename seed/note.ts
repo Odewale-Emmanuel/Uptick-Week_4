@@ -13,6 +13,8 @@ if (!mongoUri) {
   throw new Error("MONGODB_URI is not defined in environment variables.");
 }
 
+mongoose.connect(mongoUri);
+
 const notes: Pick<INote, "title" | "content" | "user_id">[] = [
   {
     title: "Home Improvement Ideas",
