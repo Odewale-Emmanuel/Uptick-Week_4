@@ -1,11 +1,15 @@
 import { Router } from "express";
-import getUsers, { deleteUser } from "../controller/user.controller";
+import getUsers, {
+  deleteUser,
+  createUser,
+  updateUser,
+} from "../controller/user.controller";
 const router = Router();
 
 router
   .get("/", getUsers)
-  .post("/", getUsers)
-  .patch("/", getUsers)
+  .post("/", createUser)
+  .patch("/", updateUser)
   .delete("/", deleteUser);
 
 export default router;

@@ -5,6 +5,26 @@ mongoose.connect("mongodb://127.0.0.1:27017/note_db_app");
 import { Response, Request } from "express";
 // import seedUsers from "../seed/user";
 
+async function createUser(req: Request, res: Response) {
+  const userName = req.body.name;
+  const userEmail = req.body.email;
+
+  try {
+    await userModel.create({
+      name: userName,
+      email: userEmail.toLowerCase(),
+    });
+    res.send("user created successfully");
+  } catch (error: any) {
+    res
+      .status(500)
+      .send(
+        `An error occured while trying to create new user. ERROR-->: ${error.message} `
+      );
+    throw error;
+  }
+}
+
 async function getUsers(req: Request, res: Response) {
   try {
     // const users = await seedUsers();
@@ -38,16 +58,43 @@ async function getUsers(req: Request, res: Response) {
     res.json(users);
     console.log(users.length);
   } catch (error: any) {
-    console.log(
-      `An error occured while getting all users -->: ${error.message} `
+    res
+      .status(500)
+      .send(`An error occured while getting all users -->: ${error.message} `);
+    throw error;
+  }
+}
+
+async function updateUser(req: Request, res: Response) {
+  const userId = req.body.id;
+  const userName = req.body.name;
+  const userEmail = req.body.email;
+  const updated_at = new Date();
+
+  const foundUser = await userModel.findById({ _id: userId });
+  if (!foundUser) {
+    res.send("user not found please pass in a valid user id");
+    return;
+  }
+
+  try {
+    await userModel.findOneAndUpdate(
+      { _id: userId },
+      { name: userName, email: userEmail, updated_at: updated_at }
     );
+    res.send("user updated successfully");
+  } catch (error: any) {
+    res
+      .status(500)
+      .send(
+        `An error occured while trying to update user. ERROR-->: ${error.message} `
+      );
     throw error;
   }
 }
 
 async function deleteUser(req: Request, res: Response) {
   const userId = req.body.id;
-  console.log(userId);
 
   try {
     const deletedUser = await userModel.deleteOne().where("_id").equals(userId);
@@ -58,11 +105,14 @@ async function deleteUser(req: Request, res: Response) {
       res.send("User not found");
     }
   } catch (error: any) {
-    console.log(
-      `An error occured while trying to delete user. ERROR-->: ${error.message} `
-    );
+    res
+      .status(500)
+      .send(
+        `An error occured while trying to delete user. ERROR-->: ${error.message} `
+      );
     throw error;
   }
 }
-export { deleteUser };
+
+export { deleteUser, updateUser, createUser };
 export default getUsers;

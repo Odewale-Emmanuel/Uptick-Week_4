@@ -4,6 +4,28 @@ mongoose.connect("mongodb://127.0.0.1:27017/note_db_app");
 import { Response, Request } from "express";
 // import seedNotes from "../seed/note";
 
+async function createNote(req: Request, res: Response) {
+  const title = req.body.title;
+  const content = req.body.content;
+  const user_id = req.body.user_id;
+
+  try {
+    await noteModel.create({
+      title: title,
+      content: content,
+      user_id: user_id,
+    });
+    res.send("note created successfully");
+  } catch (error: any) {
+    res
+      .status(500)
+      .send(
+        `An error occured while trying to create new note. ERROR-->: ${error.message} `
+      );
+    throw error;
+  }
+}
+
 async function getNotes(req: Request, res: Response) {
   try {
     // const notes = await seedNotes();
@@ -39,16 +61,44 @@ async function getNotes(req: Request, res: Response) {
     res.json(notes);
     console.log(notes.length);
   } catch (error: any) {
-    console.log(
-      `An error occured while getting all notes -->: ${error.message} `
+    res
+      .status(500)
+      .send(`An error occured while getting all notes -->: ${error.message} `);
+    throw error;
+  }
+}
+
+async function updateNote(req: Request, res: Response) {
+  const noteId = req.body.note_id;
+  const title = req.body.title;
+  const content = req.body.content;
+  const updated_at = new Date();
+
+  const foundNote = await noteModel.findById({ _id: noteId });
+  if (!foundNote) {
+    res.send("note not found please pass in a valid note id");
+    return;
+  }
+
+  try {
+    await noteModel.findOneAndUpdate(
+      { _id: noteId },
+      { title: title, content: content, updated_at: updated_at }
     );
+    res.send("note updated successfully");
+  } catch (error: any) {
+    res
+      .status(500)
+      .send(
+        `An error occured while trying to update note. ERROR-->: ${error.message} `
+      );
     throw error;
   }
 }
 
 async function deleteNote(req: Request, res: Response) {
   const noteId = req.body.id;
-  console.log(noteId);
+
   try {
     const deletedNote = await noteModel.deleteOne().where("_id").equals(noteId);
     if (deletedNote.acknowledged && deletedNote.deletedCount >= 1) {
@@ -57,12 +107,14 @@ async function deleteNote(req: Request, res: Response) {
       res.send(`No Note found for the requested note id ${noteId}`);
     }
   } catch (error: any) {
-    console.log(
-      `An error occured while trying to delete note. ERROR-->: ${error.message} `
-    );
+    res
+      .status(500)
+      .send(
+        `An error occured while trying to delete note. ERROR-->: ${error.message} `
+      );
     throw error;
   }
 }
 
-export { deleteNote };
+export { deleteNote, updateNote, createNote };
 export default getNotes;
