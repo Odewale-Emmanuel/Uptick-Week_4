@@ -14,7 +14,7 @@ const noteSchema = new Schema<INote>({
   },
   user_id: {
     type: Schema.Types.ObjectId,
-    minlength: [24, `minimum character for user id [Object(_id)] is 24`],
+    minLength: [24, `minimum character for user id [Object(_id)] is 24`],
     maxLength: [24, `maximum character for user id [Object(_id)] is 24`],
     required: true,
     ref: "user",
