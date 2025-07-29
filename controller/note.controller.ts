@@ -23,6 +23,11 @@ async function createNote(req: Request, res: Response) {
     return;
   }
 
+  if (!mongoose.Types.ObjectId.isValid(user_id)) {
+    res.status(400).send("Invalid user_id: must be a 24-character hex string");
+    return;
+  }
+
   try {
     await noteModel.create({
       title: title,
@@ -96,7 +101,8 @@ async function updateNote(req: Request, res: Response) {
   try {
     await noteModel.findOneAndUpdate(
       { _id: noteId },
-      { title: title, content: content, updated_at: updated_at }
+      { title: title, content: content, updated_at: updated_at },
+      { runValidators: true }
     );
     res.status(200).send("note updated successfully");
   } catch (error: any) {
