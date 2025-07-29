@@ -4,16 +4,18 @@ import { INote } from "../types/note";
 const noteSchema = new Schema<INote>({
   title: {
     type: String,
-    maxLength: 150,
+    maxLength: [150, `maximum allowed character is 150`],
     required: true,
   },
   content: {
     type: String,
-    maxLength: 10000,
+    maxLength: [10000, `maximum allowed character is 10,000`],
     required: true,
   },
   user_id: {
     type: Schema.Types.ObjectId,
+    minlength: [24, `minimum character for user id [Object(_id)] is 24`],
+    maxLength: [24, `maximum character for user id [Object(_id)] is 24`],
     required: true,
     ref: "user",
   },
