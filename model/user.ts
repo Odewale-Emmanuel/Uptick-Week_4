@@ -1,15 +1,21 @@
 import { Schema, model } from "mongoose";
 import { IUser } from "../types/user";
 
+const nameRegEx = /^[\p{L}\s'-]+$/u;
+const emailRegEx =
+  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$/;
+const passwordRegEx =
+  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+
 const userSchema = new Schema<IUser>({
   name: {
     type: String,
     maxLength: [150, `maximum allowed character is 150`],
     required: true,
     validate: {
-      validator: (v: string) => /^[A-Za-z\s]+$/.test(v),
+      validator: (v: string) => nameRegEx.test(v),
       message: (props) =>
-        `"${props.value}" is not a valid name. Name can only contain Alhabets and space. Syntax "firstname lastname" or "firstName middleName lastName"`,
+        `"${props.value}" is not a valid name. Name can only contain letters (including non-English characters), spaces, apostrophes, and hyphens. Examples: "firstname lastname", "firstName middleName lastName", or "Anne-Marie O'Connor".`,
     },
   },
   email: {
@@ -19,7 +25,17 @@ const userSchema = new Schema<IUser>({
     lowercase: true,
     unique: true,
     validate: {
-      validator: (v: string) => /^[a-z0-9]+@[a-z0-9-]+\.[a-z]{2,6}$/.test(v),
+      validator: (v: string) => emailRegEx.test(v),
+      message: (props) => `"${props.value}" is not a valid email address.`,
+    },
+  },
+  password: {
+    type: String,
+    minLength: [8, `minimum allowed character is 8`],
+    maxLength: [150, `maximum allowed character is 150`],
+    required: true,
+    validate: {
+      validator: (v: string) => passwordRegEx.test(v),
       message: (props) => `"${props.value}" is not a valid email address.`,
     },
   },
