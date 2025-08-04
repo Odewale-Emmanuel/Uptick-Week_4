@@ -108,11 +108,11 @@ This backend application provides a RESTful API for managing users and their not
 
 - **Routes without authentication (/api/sign-up, /api/sign-in)** don't need any token they are responsible for user registration and login. These routes are open to anyone, and they are the entry points to the authentication system.
 
-- **Routes with authentication** (/api/user, /api/note) require a valid JWT token to access. It ensures proper security is in place for sensitive actions (like updating or deleting user data and notes).
+- **Routes with authentication (/api/user, /api/note)** require a valid JWT token to access. It ensures proper security is in place for sensitive actions (like updating or deleting user data and notes).
 
 ## Tokens
 
-- When a user logs in using the /api/sign-in route, a JWT token is generated and returned. The client must then include this token in the Authorization header for any subsequent requests to routes that require authentication. This token verifies the identity and ensures that only authorized users can access or modify their data.
+- When a user logs in using the **/api/sign-in route**, a JWT token is generated and returned. The client must then include this token in the Authorization header for any subsequent requests to routes that require authentication. This token verifies the identity and ensures that only authorized users can access or modify their data.
 
 ---
 
