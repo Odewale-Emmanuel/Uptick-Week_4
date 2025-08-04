@@ -6,35 +6,15 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const mongoUri = process.env.MONGODB_URI;
+const salt = process.env.SALT;
 if (!mongoUri) {
   throw new Error("MONGODB_URI is not defined in environment variables.");
 }
+if (!salt) {
+  throw new Error("salt is not defined in environment variables.");
+}
 
 mongoose.connect(mongoUri);
-
-async function createUser(req: Request, res: Response) {
-  const userName = req.body.name;
-  const userEmail = req.body.email;
-
-  if (!userName || !userEmail) {
-    res.status(400).send("Missing required fields: name and email");
-    return;
-  }
-
-  try {
-    await userModel.create({
-      name: userName,
-      email: userEmail.toLowerCase(),
-    });
-    res.status(201).send("user created successfully");
-  } catch (error: any) {
-    res
-      .status(500)
-      .send(
-        `An error occured while trying to create new user. ERROR-->: ${error.message} `
-      );
-  }
-}
 
 async function getUsers(req: Request, res: Response) {
   try {
@@ -127,5 +107,5 @@ async function deleteUser(req: Request, res: Response) {
   }
 }
 
-export { deleteUser, updateUser, createUser };
+export { deleteUser, updateUser };
 export default getUsers;

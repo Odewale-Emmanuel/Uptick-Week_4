@@ -19,6 +19,14 @@ const noteSchema = new Schema<INote>({
     required: true,
     ref: "user",
   },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+  tags: {
+    type: [String],
+    default: [],
+  },
   created_at: {
     type: Date,
     immutable: true,
