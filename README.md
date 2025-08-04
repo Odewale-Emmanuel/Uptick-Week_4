@@ -10,7 +10,7 @@ This backend application provides a RESTful API for managing users and their not
 
 ### User Management
 
-- Register with an email and name
+- Register with an email, name, and password
 - Each user has a unique identifier (ObjectId)
 - Enforces unique email addresses (no duplicates)
 - Secure, user-specific access to notes (authentication and authorization)
@@ -31,6 +31,7 @@ This backend application provides a RESTful API for managing users and their not
 - `id` (ObjectId, Primary Key): Unique identifier for each user
 - `name` (String): The user's name
 - `email` (String, Unique): The user's email (used for authentication)
+- `password` (String): The user's password (used for authentication)
 - `created_at` (Date): Timestamp of when the user was created
 - `updated_at` (Date): Timestamp of the last time the user's details were updated
 
@@ -39,6 +40,8 @@ This backend application provides a RESTful API for managing users and their not
 - `id` (ObjectId, Primary Key): Unique identifier for each note
 - `title` (String): Title of the note
 - `content` (Text): Content or body of the note
+- `favorite` (Boolean): User favorited note
+- `tags` ([String]): Array of note tags
 - `user_id` (ObjectId, Foreign Reference): References the user who created the note
 - `created_at` (Date): Timestamp of when the note was created
 - `updated_at` (Date): Timestamp of the last time the note was modified
@@ -55,15 +58,27 @@ This backend application provides a RESTful API for managing users and their not
 
 ## API Routes
 
+## Route without Authentication
+
+### /api/sign-up
+
+- **POST** `/api/sign-up`
+
+  - Creates a new user from request body details.
+
+### /api/sign-in
+
+- **POST** `/api/sign-in`
+
+  - SignIn a new user from request body details.
+
+## Route with Authentication
+
 ### /api/user
 
 - **GET** `/api/user`
 
   - Returns all users, or a single user if `user_id` is provided as a query parameter.
-
-- **POST** `/api/user`
-
-  - Creates a new user from request body details.
 
 - **DELETE** `/api/user`
 
@@ -88,6 +103,16 @@ This backend application provides a RESTful API for managing users and their not
 
 - **PATCH** `/api/note`
   - Updates note details from request body.
+
+## Separation
+
+- **Routes without authentication** (/api/sign-up, /api/sign-in) don't need any token they are responsible for user registration and login. These routes are open to anyone, and they are the entry points to the authentication system.
+
+- **Routes with authentication** (/api/user, /api/note) require a valid JWT token to access. It ensures proper security is in place for sensitive actions (like updating or deleting user data and notes).
+
+## Tokens
+
+- When a user logs in using the /api/sign-in route, a JWT token is generated and returned. The client must then include this token in the Authorization header for any subsequent requests to routes that require authentication. This token verifies the identity and ensures that only authorized users can access or modify their data.
 
 ---
 

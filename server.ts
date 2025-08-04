@@ -30,7 +30,7 @@ app.get("/", async (req: Request, res: Response) => {
 });
 
 app.use("/api/sign-up", signUpRouter);
-app.use("/api/sign-in", tokenAuthenticaton, signInRouter);
+app.use("/api/sign-in", signInRouter);
 app.use("/api/user", tokenAuthenticaton, userRouter);
 app.use("/api/note", tokenAuthenticaton, noteRouter);
 
