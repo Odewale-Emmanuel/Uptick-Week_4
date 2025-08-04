@@ -106,7 +106,7 @@ This backend application provides a RESTful API for managing users and their not
 
 ## Separation
 
-- **Routes without authentication** (/api/sign-up, /api/sign-in) don't need any token they are responsible for user registration and login. These routes are open to anyone, and they are the entry points to the authentication system.
+- **Routes without authentication (/api/sign-up, /api/sign-in)** don't need any token they are responsible for user registration and login. These routes are open to anyone, and they are the entry points to the authentication system.
 
 - **Routes with authentication** (/api/user, /api/note) require a valid JWT token to access. It ensures proper security is in place for sensitive actions (like updating or deleting user data and notes).
 
