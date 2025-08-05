@@ -3,7 +3,9 @@ import userRouter from "./routes/user.route";
 import noteRouter from "./routes/note.route";
 import signInRouter from "./routes/signin.route";
 import signUpRouter from "./routes/signup.route";
-import { expressjwt } from "express-jwt";
+import signOutRouter from "./routes/signout.route";
+// import { expressjwt } from "express-jwt";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { tokenAuthenticaton } from "./middleware/authenticate-user-token";
 const cors = require("cors");
@@ -18,7 +20,8 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   }),
-  express.json()
+  express.json(),
+  cookieParser()
 );
 
 app.get("/", async (req: Request, res: Response) => {
@@ -31,6 +34,7 @@ app.get("/", async (req: Request, res: Response) => {
 
 app.use("/api/sign-up", signUpRouter);
 app.use("/api/sign-in", signInRouter);
+app.use("/api/sign-out", signOutRouter);
 app.use("/api/user", tokenAuthenticaton, userRouter);
 app.use("/api/note", tokenAuthenticaton, noteRouter);
 

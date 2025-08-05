@@ -22,6 +22,7 @@
   "homepage": "https://github.com/Odewale-Emmanuel/Uptick-Week_4#readme",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.9",
     "@types/express": "^5.0.3",
     "@types/express-jwt": "^6.0.4",
     "@types/jsonwebtoken": "^9.0.10",
@@ -33,6 +34,7 @@
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",

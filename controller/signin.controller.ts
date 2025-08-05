@@ -64,8 +64,27 @@ async function signIn(req: Request, res: Response) {
       const { _id, name, email } = existingUser;
       const accessToken = jwt.sign(
         { _id, name, email },
-        String(TOKEN_SECRET_KEY)
+        String(TOKEN_SECRET_KEY),
+        {
+          expiresIn: "10m",
+        }
       );
+
+      const refreshToken = jwt.sign(
+        { _id, name, email },
+        String(REFRESH_TOKEN_SECRET_KEY),
+        {
+          expiresIn: "7d",
+        }
+      );
+
+      res.cookie("jwt", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: false,
+      });
+
       res.json({ accessToken });
     } catch (error: any) {
       console.error(`An error occurred. ERROR MESSAGE: ${error.message}`);
