@@ -66,7 +66,7 @@ async function signIn(req: Request, res: Response) {
         { _id, name, email },
         String(TOKEN_SECRET_KEY),
         {
-          expiresIn: "10m",
+          expiresIn: "30m",
         }
       );
 
