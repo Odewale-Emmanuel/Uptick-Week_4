@@ -87,7 +87,9 @@ async function updateNote(req: Request, res: Response) {
   const noteId = req.body.note_id;
   const title = req.body.title;
   const content = req.body.content;
-  const updated_at = new Date();
+  const favorite = req.body.favorite || false;
+  const tags = req.body.tags || [];
+  const updated_at = req.body.updated_at || new Date();
 
   if (!noteId || !title || !content) {
     res
@@ -119,7 +121,7 @@ async function updateNote(req: Request, res: Response) {
 }
 
 async function deleteNote(req: Request, res: Response) {
-  const noteId = req.body.id;
+  const noteId = req.body.note_id;
 
   if (!noteId) {
     res.status(400).send("Missing required field: id");
