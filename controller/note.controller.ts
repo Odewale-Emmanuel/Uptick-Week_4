@@ -14,6 +14,8 @@ mongoose.connect(mongoUri);
 async function createNote(req: Request, res: Response) {
   const title = req.body.title;
   const content = req.body.content;
+  const tags = req.body.tags || [];
+  const favorite = req.body.favorite || false;
   const user_id = req.body.user_id;
 
   if (!title || !content || !user_id) {
@@ -33,6 +35,8 @@ async function createNote(req: Request, res: Response) {
       title: title,
       content: content,
       user_id: user_id,
+      tags: tags,
+      favorite: favorite,
     });
     res.status(201).send("note created successfully");
   } catch (error: any) {
