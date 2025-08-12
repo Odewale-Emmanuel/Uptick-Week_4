@@ -121,7 +121,7 @@ async function updateNote(req: Request, res: Response) {
 }
 
 async function deleteNote(req: Request, res: Response) {
-  const noteId = req.body.note_id;
+  const noteId = req.body.note_id || req.query.note_id;
 
   if (!noteId) {
     res.status(400).send("Missing required field: id");
