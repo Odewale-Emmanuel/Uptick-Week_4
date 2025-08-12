@@ -107,7 +107,7 @@ async function updateNote(req: Request, res: Response) {
   try {
     await noteModel.findOneAndUpdate(
       { _id: noteId },
-      { title: title, content: content, updated_at: updated_at },
+      { title, content, favorite, tags, updated_at },
       { runValidators: true }
     );
     res.status(200).send("note updated successfully");
