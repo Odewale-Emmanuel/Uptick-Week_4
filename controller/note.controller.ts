@@ -32,11 +32,11 @@ async function createNote(req: Request, res: Response) {
 
   try {
     await noteModel.create({
-      title: title,
-      content: content,
-      user_id: user_id,
-      tags: tags,
-      favorite: favorite,
+      title,
+      content,
+      user_id,
+      tags,
+      favorite,
     });
     res.status(201).send("note created successfully");
   } catch (error: any) {
