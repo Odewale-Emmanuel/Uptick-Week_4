@@ -104,8 +104,6 @@ async function updateNote(req: Request, res: Response) {
     return;
   }
 
-  console.log("favorite: ", favorite);
-
   try {
     await noteModel.findOneAndUpdate(
       { _id: noteId },
