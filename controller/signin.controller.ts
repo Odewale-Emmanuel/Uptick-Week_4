@@ -85,9 +85,7 @@ async function signIn(req: Request, res: Response) {
         sameSite: "none",
       });
 
-      console.log(refreshToken);
-
-      res.json({ accessToken });
+      res.json({ accessToken, refreshToken });
     } catch (error: any) {
       console.error(`An error occurred. ERROR MESSAGE: ${error.message}`);
       res
