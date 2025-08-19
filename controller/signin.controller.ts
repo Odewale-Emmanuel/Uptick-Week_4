@@ -78,15 +78,21 @@ async function signIn(req: Request, res: Response) {
         }
       );
 
-      res.cookie("jwt", refreshToken, {
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 30 * 60 * 1000,
+        sameSite: "none",
+      });
+
+      res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
         sameSite: "none",
       });
 
-      console.log(res);
-      res.json({ accessToken, refreshToken });
+      res.json({ accessToken });
     } catch (error: any) {
       console.error(`An error occurred. ERROR MESSAGE: ${error.message}`);
       res
