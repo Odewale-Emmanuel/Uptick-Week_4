@@ -14,9 +14,20 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
+const allowedOrigins = [
+  "https://starknote.vercel.app",
+  "https://starknotes-nextjs.vercel.app",
+];
+
 app.use(
   cors({
-    origin: "https://starknotes-nextjs.vercel.app",
+    origin: function (origin: any, callback: any) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   }),
