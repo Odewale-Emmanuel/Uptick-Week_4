@@ -16,7 +16,7 @@ const PORT = process.env.PORT;
 
 app.use(
   cors({
-    origin: "*",
+    origin: "https://starknotes-nextjs.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   }),
