@@ -83,6 +83,7 @@ async function signIn(req: Request, res: Response) {
         secure: true,
         maxAge: 30 * 60 * 1000,
         sameSite: "none",
+        partitioned: true,
       });
 
       res.cookie("refreshToken", refreshToken, {
@@ -90,6 +91,7 @@ async function signIn(req: Request, res: Response) {
         secure: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
         sameSite: "none",
+        partitioned: true,
       });
 
       res.json({ accessToken });
